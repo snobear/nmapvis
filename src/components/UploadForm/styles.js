@@ -11,7 +11,7 @@ export const CheckBoxContainer = styled.div`
 
 export const DropArea = styled.div`
   border: 7px dashed #D9AE61;
-  background: #41394D;
+  background: #676171;
   padding: 50px;
   width: auto;
   text-align: center;
@@ -27,9 +27,13 @@ export const PTextLight = styled.p`
 `;
 
 export const ErrorText = styled.p`
-  color: #D1462F;
+  color: #ff806c;
+  padding: 5px;
+  background: #000;
 `;
 
 export const SuccessText = styled.p`
-  color: green;
+  color: #47952C;
+  padding: 5px;
+  background: #000;
 `;

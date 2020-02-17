@@ -17,7 +17,7 @@ CREATE TABLE scanned_hosts (
   addrtype NVARCHAR(10) NULL,
   addr NVARCHAR(50) NULL,
   hostname NVARCHAR(300) NULL,
-  state NVARCHAR(100) NULL,
+  host_state NVARCHAR(100) NULL,
   start_dt INTEGER,
   end_dt INTEGER,
   FOREIGN KEY(scan_id) REFERENCES scans(scan_id)

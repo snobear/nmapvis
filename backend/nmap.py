@@ -7,9 +7,18 @@ from backend.log import setup_logging
 
 log = setup_logging(level='debug', log_to_terminal=True)
 
-def dbconnect(dbname):
+
+def process_file(dbname, filename, filepath, overwrite):
+    """entry point: connect to DB and process a given file"""
+    conn, cur = dbconnect(dbname)
+
+    parse_xml(conn, cur, filename, filepath, overwrite)
+
+def dbconnect(dbname, dfactory=False):
     try:
         conn = sqlite3.connect(dbname)
+        if dfactory:
+            conn.row_factory = dict_factory
         conn.execute("PRAGMA foreign_keys = 1")
         cur = conn.cursor()
     except Exception as e:
@@ -23,12 +32,22 @@ def scan_exists(dbname, filename):
     conn, cur = dbconnect(dbname)
     return True if get_scan_id(cur, filename) != None else False
 
-def process_file(dbname, filename, filepath, overwrite):
-    """entry point: connect to DB and process a given file"""
-    conn, cur = dbconnect(dbname)
+def dict_factory(cursor, row):
+    """Used for returing query data as a dict with column names"""
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
 
-    # TODO: check is valid nmap xml
-    parse_xml(conn, cur, filename, filepath, overwrite)
+def get_results(dbname):
+    """Return port scan results and associated hosts"""
+    conn, cur = dbconnect(dbname, dfactory=True)
+    cur.execute("""
+       select * from scan_results
+         inner join scanned_hosts on scan_results.hostscan_id = scanned_hosts.hostscan_id
+         inner join scans on scanned_hosts.scan_id = scans.scan_id
+    """)
+    return cur.fetchall()
 
 def parse_xml(conn, cur, filename, filepath, overwrite):
     """parse nmap xml and ingest into DB"""
@@ -159,7 +178,7 @@ def insert_scanned_host(conn, cur, hosttuple):
     try:
         log.debug("inserting scanned host info: %s" % (hosttuple,))
         cur.execute("""
-            insert into scanned_hosts(scan_id,addrtype,addr,hostname,state,start_dt,end_dt)
+            insert into scanned_hosts(scan_id,addrtype,addr,hostname,host_state,start_dt,end_dt)
             VALUES (?,?,?,?,?,?,?)
             """, hosttuple)
         conn.commit()

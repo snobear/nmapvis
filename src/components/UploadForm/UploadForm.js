@@ -14,6 +14,7 @@ import { Info } from 'react-feather';
  */
 const UploadForm = () => {
   const [notification, setNotification] = useState();
+  const [overwrite, setOverwrite] = useState(false);
   let notificationEl;
 
   if (notification && notification.type && notification.msg) {
@@ -41,12 +42,12 @@ const UploadForm = () => {
       filename = acceptedFiles[0].name;
     }
 
-    const overwrite = 'false';
-
     uploadFile(acceptedFiles, overwrite)
       .then(res => {
         if (res.result === 'UPLOAD_FILE_EXISTS') {
           setNotification({ type: 'error', msg: `${filename} already uploaded. Select the overwrite checkbox to force overwrite any existing data for this scan.` });
+        } else if (res.result === 'INVALID_XML') {
+          setNotification({ type: 'error', msg: `${filename} is not a valid xml file. Nice try.` });
         } else {
           setNotification({ type: 'success', msg: `${filename} imported successfully.`});
         }
@@ -55,7 +56,7 @@ const UploadForm = () => {
         console.error(e);
         setNotification({ type: 'error', msg: 'Sorry, there was an error importing your file. Please contact support for assistance.'});
       })
-  }, [])
+  }, [overwrite])
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
     onDrop,
@@ -72,14 +73,14 @@ const UploadForm = () => {
         {notificationEl}
         </DropArea>
         <CheckBoxContainer>
-          <input type="checkbox" />
-          <label><PText>&nbsp; overwrite &nbsp;</PText></label>
+          <input type="checkbox" onChange={() => setOverwrite(!overwrite)}/>
+          <label><PText>&nbsp; Overwrite &nbsp;</PText></label>
           <OverlayTrigger
             placement='right'
             overlay={
             <Tooltip id='tooltip-right' container="body" >
               Check this option if you are reuploading the same results file (same filename) and
-              wish to overwrite/replace the previous file's scan results.
+              wish to overwrite/replace its previous scan results.
             </Tooltip>
           }>
             <Info size={17} color="#999999" />

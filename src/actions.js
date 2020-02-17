@@ -16,12 +16,31 @@ export const uploadFile = (files, overwrite) => {
     formData.append('scanresults', file);
   });
 
+
   return fetch(`${REST_SERVER_URL}/upload`, {
       method: 'POST',
       body: formData,
     })
     .then(response => {
       if (response.status === 400 || response.ok) {
+        return response.json();
+      }
+      throw Error(response.statusText);
+    })
+    .catch(e => {
+      throw Error(e);
+    });
+}
+
+/*
+ * Fetch all scan results. No pagination = craycray
+ */
+export const fetchResults = () => {
+  return fetch(`${REST_SERVER_URL}/get-results`, {
+      method: 'GET'
+    })
+    .then(response => {
+      if (response.ok) {
         return response.json();
       }
       throw Error(response.statusText);

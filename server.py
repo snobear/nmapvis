@@ -5,7 +5,8 @@ import os
 import sys
 import errno
 from backend.log import setup_logging
-from backend.nmap import scan_exists, process_file
+from backend.nmap import scan_exists, process_file, get_results
+from xml.etree.ElementTree import ParseError
 
 ## configs
 DBNAME = "backend/nmap.db"
@@ -39,11 +40,15 @@ def startup_checks():
 def index():
     return render_template('index.html')
 
-@app.route('/getScanResults', methods=['GET'])
+@app.route('/get-results', methods=['GET'])
 def get_scan_results():
-    """Fetch scan results with optional filters"""
-
-
+    """Fetch scan results"""
+    try:
+        res = get_results(DBNAME)
+        return jsonify(res), 200
+    except Exception as e:
+        log.error("exception during get_scan_results fetch: %s" % e)
+        return jsonify("encountered server error while fetching results"), 500
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -51,7 +56,7 @@ def upload():
     if 'scanresults' in request.files:
         filename = request.files['scanresults'].filename
         overwrite = request.form.get('overwrite')
-
+        log.debug(overwrite)
         if scan_exists(DBNAME, filename) and (overwrite != 'true'):
             msg = "%s already imported and overwrite not selected." % filename
             log.debug(msg)
@@ -65,11 +70,14 @@ def upload():
             log.debug("file saved successfully: %s" % upload_path)
 
             # parse and ingest data to DB
-            #process_file(DBNAME, filename, upload_path, overwrite)
+            process_file(DBNAME, filename, upload_path, overwrite)
 
             resp={ 'result': 'UPLOAD_SUCCESS', 'msg': 'File imported successfully'}
             return jsonify(resp), 200
-
+        except ParseError as e:
+            log.error("xml parse error: %s" % e)
+            resp={ 'result': 'INVALID_XML', 'msg': 'not a valid xml file.' }
+            return jsonify(resp), 400
         except Exception as e:
             log.error("exception during file import: %s" % e)
             return jsonify("encountered server error while importing file"), 500
