@@ -1,6 +1,5 @@
 tags
 static
-# Created by https://www.gitignore.io/api/node
 
 ### Node ###
 # Logs
@@ -200,5 +199,5 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-
-# End of https://www.gitignore.io/api/osx
+backend/*.db
+uploads/*
