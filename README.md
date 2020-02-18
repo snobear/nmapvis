@@ -17,7 +17,7 @@ Then go to [http://localhost:3000/](http://localhost:3000/) in your browser.
 
 ## Usage
 
-The UI should (hopefully :)) be intuitive, but if not:
+The UI *should* be intuitive, but if not:
 
 - Click `Upload nmap scan results` button to import an nmap results xml file.
 - Exit import modal and results will populate.
@@ -44,12 +44,12 @@ For the sake of brevity in this small project, I cut a few corners :). For a mor
 - More attention to detail to DB schema, e.g. store IPs in binary format instead of chars for easier sorting.
 - Use a battle-tested production web server like nginx+uwsgi instead of using flask to serve everything.cd ..
 
-## Tech Selection
+## Language Selection
 
-*REST API*
+#### REST API
 
 Python is my fav and strongest language currently. If speed were the highest concern, I may have reached for Go or Rust for the backend.
 
-*Front-end*
+#### Front-end
 
 React is awesome. We could have a more robust SPA by introducing Redux as mentioned above, and using change feeds/streams from the DB to push updates to the app for a more real-time UI.
