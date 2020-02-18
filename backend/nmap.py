@@ -7,7 +7,6 @@ from backend.log import setup_logging
 
 log = setup_logging(level='debug', log_to_terminal=True)
 
-
 def process_file(dbname, filename, filepath, overwrite):
     """entry point: connect to DB and process a given file"""
     conn, cur = dbconnect(dbname)

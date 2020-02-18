@@ -1,6 +1,7 @@
 {
   "scripts": {
     "dev": "webpack --mode development",
+    "prod": "webpack --mode production",
     "start": "webpack --mode development --watch"
   },
   "keywords": [],

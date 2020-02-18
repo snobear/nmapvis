@@ -1,7 +1,7 @@
 """Backend logging configuration"""
 import logging
 
-LOGFILE='app.log'
+LOGFILE='/tmp/app.log'
 
 LEVELS = {
     'debug': logging.DEBUG,

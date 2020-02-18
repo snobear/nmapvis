@@ -25,6 +25,12 @@ const UploadForm = () => {
     }
   }
 
+  // clear notification after 8 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => setNotification(), 8000);
+    return () => clearTimeout(timer);
+  }, [notification]);
+
   // file upload handler
   const onDrop = useCallback(acceptedFiles => {
     setNotification(); // clear notification messages
@@ -45,9 +51,9 @@ const UploadForm = () => {
     uploadFile(acceptedFiles, overwrite)
       .then(res => {
         if (res.result === 'UPLOAD_FILE_EXISTS') {
-          setNotification({ type: 'error', msg: `${filename} already uploaded. Select the overwrite checkbox to force overwrite any existing data for this scan.` });
+          setNotification({ type: 'error', msg: `${filename} already imported. Select the overwrite checkbox to force overwrite any existing data for this scan.` });
         } else if (res.result === 'INVALID_XML') {
-          setNotification({ type: 'error', msg: `${filename} is not a valid xml file. Nice try.` });
+          setNotification({ type: 'error', msg: `${filename} is not a valid xml file.` });
         } else {
           setNotification({ type: 'success', msg: `${filename} imported successfully.`});
         }

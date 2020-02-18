@@ -1,0 +1,9 @@
+node_modules
+backend/*.db
+backend/*.log
+backend/__pycache__
+uploads
+venv
+*.log
+.git
+__pycache__

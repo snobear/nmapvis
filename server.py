@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+"""
+nmapvis REST API
+"""
 from flask import Flask, render_template, request, jsonify
 from flask_uploads import UploadSet, configure_uploads
 import os
@@ -8,20 +11,24 @@ from backend.log import setup_logging
 from backend.nmap import scan_exists, process_file, get_results
 from xml.etree.ElementTree import ParseError
 
-## configs
-DBNAME = "backend/nmap.db"
+# configs
+DBNAME = "./backend/nmap.db"
 app = Flask(__name__)
 app.config['UPLOADED_FILES_DEST'] = 'uploads'
 xml_file = UploadSet('files', ('xml',))
+
+log = setup_logging(level='debug', log_to_terminal=True)
+
 configure_uploads(app, xml_file)
 
-## helpers
+# helpers
 def startup_checks():
     """
     Run some pre-start checks:
     - uploads directory exists and is writeable by flask
     - sqlite DB exists
     """
+    # debug
     if not os.path.exists(app.config['UPLOADED_FILES_DEST']):
         log.error("error: uploads directory %s does not exist." % app.config['UPLOADED_FILES_DEST'])
         sys.exit(1)
@@ -35,7 +42,7 @@ def startup_checks():
         raise FileNotFoundError(
             errno.ENOENT, os.strerror(errno.ENOENT), DBNAME)
 
-## routes
+# routes
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -89,7 +96,5 @@ def upload():
         return jsonify(resp), 400
 
 if __name__ == "__main__":
-    log = setup_logging(level='debug', log_to_terminal=True)
     startup_checks()
-
-    app.run(host='localhost', port=os.environ.get('PORT', 3000), debug=True)
+    app.run(host='0.0.0.0', port=os.environ.get('PORT', 3000), debug=True)
