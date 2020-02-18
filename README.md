@@ -42,7 +42,7 @@ For the sake of brevity in this small project, I cut a few corners :). For a mor
 - Store uploaded files in S3 or persistent storage. Compress and add lifecycle/retention rules.
 - Scan all uploaded files prior to opening and parsing, e.g. with clamav.
 - More attention to detail to DB schema, e.g. store IPs in binary format instead of chars for easier sorting.
-- Use a battle-tested production web server like nginx+uwsgi instead of using flask to serve everything.cd ..
+- Use a battle-tested production web server like nginx+uwsgi instead of using flask to serve everything.
 
 ## Language Selection
 
