@@ -4,9 +4,13 @@
 
 NmapVis is a super simple web GUI for importing and displaying nmap xml scan results.
 
+![image](https://user-images.githubusercontent.com/696230/76523028-0f8efb00-643e-11ea-9537-36c4b8680d9d.png)
+
+![Screen Shot 2020-03-12 at 8 43 51 AM](https://user-images.githubusercontent.com/696230/76522822-a1e2cf00-643d-11ea-9e1c-408703f4911e.png)
+
 ## Deploy
 
-Build and run with Docker. From main directory:
+Build and run with Docker. Clone this repo, then from main directory:
 
 ```
 docker build -t nmapvis .
