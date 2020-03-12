@@ -2,7 +2,7 @@
 
 ## About
 
-NmapVis is a super simple web GUI for importing and displaying nmap xml scan results. It is built with React, Flask, and maintains data in a sqlite DB. 
+NmapVis is a super simple web GUI for importing and displaying [nmap](https://nmap.org) xml scan results. It is built with React, Flask, and maintains data in a sqlite DB. 
 
 ![image](https://user-images.githubusercontent.com/696230/76523028-0f8efb00-643e-11ea-9537-36c4b8680d9d.png)
 
