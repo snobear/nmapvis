@@ -10,7 +10,13 @@ NmapVis is a super simple web GUI for importing and displaying [nmap](https://nm
 
 ## Deploy
 
-Build and run with Docker. Clone this repo, then from main directory:
+Run from Docker hub
+
+```
+docker run -d --name nmapvis -p 3000:3000 snobear/nmapvis
+```
+
+Or clone this repo, and build and run:
 
 ```
 docker build -t nmapvis .
